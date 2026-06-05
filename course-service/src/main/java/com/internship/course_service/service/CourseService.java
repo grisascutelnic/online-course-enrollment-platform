@@ -4,18 +4,25 @@ import com.internship.course_service.dto.CreateCourseRequest;
 import com.internship.course_service.dto.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
+import com.internship.course_service.event.EnrollmentRequestedEvent;
+import com.internship.course_service.publisher.EnrollmentEventPublisher;
 import com.internship.course_service.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final EnrollmentEventPublisher enrollmentEventPublisher;
 
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository,
+                         EnrollmentEventPublisher enrollmentEventPublisher) {
         this.courseRepository = courseRepository;
+        this.enrollmentEventPublisher = enrollmentEventPublisher;
     }
 
     public Course createCourse(CreateCourseRequest request) {
@@ -72,5 +79,29 @@ public class CourseService {
 
     public void deleteCourse(String id) {
         courseRepository.deleteById(id);
+    }
+
+    public void requestEnrollment(
+            String courseId,
+            String studentUsername
+    ) {
+        Course course = getCourseById(courseId);
+
+        if (course.getStatus() != CourseStatus.OPEN) {
+            throw new RuntimeException("Course is not open for enrollment");
+        }
+
+        if (course.getAvailableSeats() == null || course.getAvailableSeats() <= 0) {
+            throw new RuntimeException("No available seats for this course");
+        }
+
+        EnrollmentRequestedEvent event = EnrollmentRequestedEvent.builder()
+                .eventId(UUID.randomUUID().toString())
+                .courseId(course.getId())
+                .studentUsername(studentUsername)
+                .requestedAt(LocalDateTime.now())
+                .build();
+
+        enrollmentEventPublisher.publishEnrollmentRequested(event);
     }
 }

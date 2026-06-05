@@ -8,6 +8,7 @@ import com.internship.course_service.service.CourseService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,5 +57,17 @@ public class CourseController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public void deleteCourse(@PathVariable String id) {
         courseService.deleteCourse(id);
+    }
+
+    @PostMapping("/{id}/enrollment-requests")
+    @PreAuthorize("hasRole('STUDENT')")
+    public void requestEnrollment(
+            @PathVariable String id,
+            Authentication authentication
+    ) {
+        courseService.requestEnrollment(
+                id,
+                authentication.getName()
+        );
     }
 }
