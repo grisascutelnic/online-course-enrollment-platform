@@ -4,6 +4,7 @@ import com.internship.course_service.dto.auth.AuthResponse;
 import com.internship.course_service.dto.auth.LoginRequest;
 import com.internship.course_service.dto.auth.RegisterRequest;
 import com.internship.course_service.entity.User;
+import com.internship.course_service.enums.Role;
 import com.internship.course_service.repository.UserRepository;
 import com.internship.course_service.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.STUDENT)
                 .createdAt(LocalDateTime.now())
                 .build();
 

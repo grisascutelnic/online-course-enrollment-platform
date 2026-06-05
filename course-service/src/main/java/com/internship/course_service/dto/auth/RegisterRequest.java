@@ -25,7 +25,4 @@ public class RegisterRequest {
     @NotBlank(message = "Password is required")
     @Size(min = 6, max = 100)
     private String password;
-
-    @NotNull(message = "Role is required")
-    private Role role;
 }

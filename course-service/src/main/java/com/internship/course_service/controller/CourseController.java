@@ -5,6 +5,7 @@ import com.internship.course_service.dto.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.service.CourseService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,11 @@ public class CourseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public Course getCourseById(@PathVariable String id) {
         return courseService.getCourseById(id);
     }

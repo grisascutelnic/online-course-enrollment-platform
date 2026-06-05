@@ -3,6 +3,7 @@ package com.internship.course_service.service;
 import com.internship.course_service.dto.auth.RegisterRequest;
 import com.internship.course_service.dto.user.UpdateRoleRequest;
 import com.internship.course_service.entity.User;
+import com.internship.course_service.enums.Role;
 import com.internship.course_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +33,7 @@ public class UserService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.STUDENT)
                 .createdAt(LocalDateTime.now())
                 .build();
 
