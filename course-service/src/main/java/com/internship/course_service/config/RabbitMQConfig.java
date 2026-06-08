@@ -15,12 +15,16 @@ public class RabbitMQConfig {
     public static final String ENROLLMENT_EXCHANGE = "enrollment.exchange";
     public static final String ENROLLMENT_REQUESTED_QUEUE = "enrollment.requested.queue";
     public static final String ENROLLMENT_REQUESTED_ROUTING_KEY = "enrollment.requested";
+    // ^ exchange foloseste aceasta metoda pentru a decide in ce coada sa trimita mesajul
 
+
+    // creates RabbitMQ administrator used to manage queues, exchanges, and bindings.
     @Bean
-    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) { //create a connection to Rabbit
         return new RabbitAdmin(connectionFactory);
     }
 
+    //postar, exista direct, fanout(la toti), topic (foloseste patternuri)
     @Bean
     public DirectExchange enrollmentExchange() {
         return new DirectExchange(ENROLLMENT_EXCHANGE);
@@ -33,6 +37,7 @@ public class RabbitMQConfig {
                 .build();
     }
 
+    // Binds the queue to the exchange using the enrollment routing key.
     @Bean
     public Binding enrollmentRequestedBinding() {
         return BindingBuilder
@@ -41,11 +46,13 @@ public class RabbitMQConfig {
                 .with(ENROLLMENT_REQUESTED_ROUTING_KEY);
     }
 
+    // Converts Java objects to JSON and JSON back to Java objects.
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
+    // Configures RabbitTemplate to send messages using JSON serialization.
     @Bean
     public RabbitTemplate rabbitTemplate(
             ConnectionFactory connectionFactory,

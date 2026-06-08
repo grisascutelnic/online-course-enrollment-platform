@@ -1,18 +1,21 @@
 version: '3.8'
 
 services:
-
   mongo-course:
     image: mongo:8
     container_name: mongo-course
     ports:
       - "27017:27017"
+    volumes:
+      - mongo-course-data:/data/db
 
   mongo-enrollment:
     image: mongo:8
     container_name: mongo-enrollment
     ports:
       - "27018:27017"
+    volumes:
+      - mongo-enrollment-data:/data/db
 
   rabbitmq:
     image: rabbitmq:4-management
@@ -20,3 +23,7 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+volumes:
+  mongo-course-data:
+  mongo-enrollment-data:

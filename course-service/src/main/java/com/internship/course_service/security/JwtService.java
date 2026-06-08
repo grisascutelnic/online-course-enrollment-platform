@@ -82,9 +82,4 @@ public class JwtService {
 
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-    @PostConstruct
-    public void test() {
-        System.out.println("JWT SECRET = " + secretKey);
-    }
 }

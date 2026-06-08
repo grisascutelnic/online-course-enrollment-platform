@@ -1,4 +1,4 @@
-package com.internship.course_service.dto;
+package com.internship.course_service.dto.course;
 
 import com.internship.course_service.enums.CourseStatus;
 import jakarta.validation.constraints.Min;

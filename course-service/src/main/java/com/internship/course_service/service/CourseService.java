@@ -1,7 +1,7 @@
 package com.internship.course_service.service;
 
-import com.internship.course_service.dto.CreateCourseRequest;
-import com.internship.course_service.dto.UpdateCourseRequest;
+import com.internship.course_service.dto.course.CreateCourseRequest;
+import com.internship.course_service.dto.course.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.event.EnrollmentRequestedEvent;

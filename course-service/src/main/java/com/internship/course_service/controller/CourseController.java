@@ -1,11 +1,10 @@
 package com.internship.course_service.controller;
 
-import com.internship.course_service.dto.CreateCourseRequest;
-import com.internship.course_service.dto.UpdateCourseRequest;
+import com.internship.course_service.dto.course.CreateCourseRequest;
+import com.internship.course_service.dto.course.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.service.CourseService;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

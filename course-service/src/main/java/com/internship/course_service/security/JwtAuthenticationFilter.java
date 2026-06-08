@@ -29,19 +29,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        //se ia tokinul din request
         final String authHeader = request.getHeader("Authorization");
 
+        //verifica daca exista token, daca nu, nu se blocheaza, pe urma se decide daca e public/protejat
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        //se scoate token curat de 7 caractere, si username-ul
         final String jwt = authHeader.substring(7);
         final String username = jwtService.extractUsername(jwt);
 
+        //se verifica daca nu e user autentificat
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+            //cauta user in bd
             UserDetails userDetails =
                     customUserDetailsService.loadUserByUsername(username);
 
@@ -58,12 +62,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request)
                 );
-
+                //aici spring security afla, pentru acest request, userul este x
                 SecurityContextHolder.getContext()
                         .setAuthentication(authToken);
             }
         }
-
+        //requestul este trimis spre controller
         filterChain.doFilter(request, response);
     }
 }

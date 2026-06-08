@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@RequiredArgsConstructor // generates a constructor for all final fields.
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
-            @Valid @RequestBody RegisterRequest request
+            @Valid @RequestBody RegisterRequest request //la Valid intoarce 400 Bad Request daca nu corespudne validarilor DTO
     ) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.register(request));
-    }
+    } //ResponseEntity it's used to return a status
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(

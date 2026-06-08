@@ -22,7 +22,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager; // Verify user credentials during login
     private final JwtService jwtService;
 
     public AuthResponse register(RegisterRequest request) {
@@ -45,6 +45,7 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
+        // Convert the saved user into a UserDetails object to be understood by Spring Security
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(savedUser.getUsername())
                 .password(savedUser.getPassword())
@@ -62,6 +63,7 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
 
+        //verify if the username and password are correct
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
