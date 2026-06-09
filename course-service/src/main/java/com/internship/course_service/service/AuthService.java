@@ -5,6 +5,8 @@ import com.internship.course_service.dto.auth.LoginRequest;
 import com.internship.course_service.dto.auth.RegisterRequest;
 import com.internship.course_service.entity.User;
 import com.internship.course_service.enums.Role;
+import com.internship.course_service.exception.DuplicateUserException;
+import com.internship.course_service.exception.UserNotFoundException;
 import com.internship.course_service.repository.UserRepository;
 import com.internship.course_service.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +30,11 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username is already taken");
+            throw new DuplicateUserException("Username is already taken");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already taken");
+            throw new DuplicateUserException("Email is already taken");
         }
 
         User user = User.builder()
@@ -72,7 +74,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())

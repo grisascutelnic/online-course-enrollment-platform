@@ -5,6 +5,8 @@ import com.internship.course_service.dto.course.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.event.EnrollmentRequestedEvent;
+import com.internship.course_service.exception.CourseEnrollmentException;
+import com.internship.course_service.exception.CourseNotFoundException;
 import com.internship.course_service.publisher.EnrollmentEventPublisher;
 import com.internship.course_service.repository.CourseRepository;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class CourseService {
 
     public Course getCourseById(String id) {
         return courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course not found"));
     }
 
     public Course updateCourse(String id, UpdateCourseRequest request) {
@@ -88,11 +90,11 @@ public class CourseService {
         Course course = getCourseById(courseId);
 
         if (course.getStatus() != CourseStatus.OPEN) {
-            throw new RuntimeException("Course is not open for enrollment");
+            throw new CourseEnrollmentException("Course is not open for enrollment");
         }
 
         if (course.getAvailableSeats() == null || course.getAvailableSeats() <= 0) {
-            throw new RuntimeException("No available seats for this course");
+            throw new CourseEnrollmentException("No available seats for this course");
         }
 
         EnrollmentRequestedEvent event = EnrollmentRequestedEvent.builder()

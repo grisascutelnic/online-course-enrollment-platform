@@ -4,6 +4,7 @@ import com.internship.course_service.dto.auth.RegisterRequest;
 import com.internship.course_service.dto.user.UpdateRoleRequest;
 import com.internship.course_service.entity.User;
 import com.internship.course_service.enums.Role;
+import com.internship.course_service.exception.UserNotFoundException;
 import com.internship.course_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,7 @@ public class UserService {
     public User updateRole(String userId, UpdateRoleRequest request) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setRole(request.getRole());
 
