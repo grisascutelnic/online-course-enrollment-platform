@@ -5,6 +5,8 @@ import com.internship.enrollment_service.dto.enrollment.UpdateEnrollmentStatusRe
 import com.internship.enrollment_service.entity.Enrollment;
 import com.internship.enrollment_service.enums.EnrollmentStatus;
 import com.internship.enrollment_service.event.EnrollmentRequestedEvent;
+import com.internship.enrollment_service.exception.EnrollmentNotFoundException;
+import com.internship.enrollment_service.exception.InvalidEnrollmentStatusException;
 import com.internship.enrollment_service.repository.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,14 +63,56 @@ public class EnrollmentService {
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Enrollment not found"));
+                        new EnrollmentNotFoundException("Enrollment not found"));
 
-        enrollment.setStatus(request.getStatus());
+        EnrollmentStatus currentStatus = enrollment.getStatus();
+        EnrollmentStatus newStatus = request.getStatus();
 
-        Enrollment updatedEnrollment =
-                enrollmentRepository.save(enrollment);
+        validateStatusTransition(currentStatus, newStatus);
+
+        enrollment.setStatus(newStatus);
+
+        Enrollment updatedEnrollment = enrollmentRepository.save(enrollment);
 
         return mapToResponse(updatedEnrollment);
+    }
+
+    //status workflow
+    private void validateStatusTransition(
+            EnrollmentStatus currentStatus,
+            EnrollmentStatus newStatus
+    ) {
+
+        if (currentStatus == newStatus) {
+            throw new InvalidEnrollmentStatusException(
+                    "Enrollment already has status " + currentStatus
+            );
+        }
+
+        switch (currentStatus) {
+            case PENDING -> {
+                if (newStatus != EnrollmentStatus.APPROVED
+                        && newStatus != EnrollmentStatus.REJECTED
+                        && newStatus != EnrollmentStatus.CANCELLED) {
+                    throw new InvalidEnrollmentStatusException(
+                            "Invalid status transition from " + currentStatus + " to " + newStatus
+                    );
+                }
+            }
+
+            case APPROVED -> {
+                if (newStatus != EnrollmentStatus.COMPLETED
+                        && newStatus != EnrollmentStatus.CANCELLED) {
+                    throw new InvalidEnrollmentStatusException(
+                            "Invalid status transition from " + currentStatus + " to " + newStatus
+                    );
+                }
+            }
+
+            case REJECTED, COMPLETED, CANCELLED -> throw new InvalidEnrollmentStatusException(
+                    "Cannot change status from final status " + currentStatus
+            );
+        }
     }
 
     private EnrollmentResponse mapToResponse(Enrollment enrollment) {
