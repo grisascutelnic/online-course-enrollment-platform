@@ -26,5 +26,7 @@ public class Enrollment {
 
     private EnrollmentStatus status;
 
+    private String teacherUsername;
+
     private LocalDateTime createdAt;
 }

@@ -27,13 +27,17 @@ public class CourseService {
         this.enrollmentEventPublisher = enrollmentEventPublisher;
     }
 
-    public Course createCourse(CreateCourseRequest request) {
+    public Course createCourse(
+            CreateCourseRequest request,
+            String teacherUsername
+    ) {
 
         Course course = new Course();
         course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
         course.setAvailableSeats(request.getAvailableSeats());
         course.setStatus(CourseStatus.OPEN);
+        course.setTeacherUsername(teacherUsername);
 
         return courseRepository.save(course);
     }
@@ -101,6 +105,7 @@ public class CourseService {
                 .eventId(UUID.randomUUID().toString())
                 .courseId(course.getId())
                 .studentUsername(studentUsername)
+                .teacherUsername(course.getTeacherUsername())
                 .requestedAt(LocalDateTime.now())
                 .build();
 

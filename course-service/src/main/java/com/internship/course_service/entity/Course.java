@@ -23,4 +23,6 @@ public class Course {
     private Integer availableSeats;
 
     private CourseStatus status;
+
+    private String teacherUsername;
 }

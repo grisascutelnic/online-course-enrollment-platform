@@ -24,8 +24,14 @@ public class CourseController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public Course createCourse(@Valid @RequestBody CreateCourseRequest request) {
-        return courseService.createCourse(request);
+    public Course createCourse(
+            @Valid @RequestBody CreateCourseRequest request,
+            Authentication authentication
+    ) {
+        return courseService.createCourse(
+                request,
+                authentication.getName()
+        );
     }
 
     @GetMapping

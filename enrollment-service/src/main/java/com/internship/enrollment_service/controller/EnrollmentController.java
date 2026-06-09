@@ -5,6 +5,8 @@ import com.internship.enrollment_service.dto.enrollment.UpdateEnrollmentStatusRe
 import com.internship.enrollment_service.service.EnrollmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,23 +18,48 @@ public class EnrollmentController {
 
     private final EnrollmentService enrollmentService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<EnrollmentResponse> getAllEnrollments() {
         return enrollmentService.getAllEnrollments();
     }
 
-    @GetMapping("/student/{studentUsername}")
-    public List<EnrollmentResponse> getEnrollmentsByStudentUsername(
-            @PathVariable String studentUsername
-    ) {
-        return enrollmentService.getEnrollmentsByStudentUsername(studentUsername);
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/student/me")
+    public List<EnrollmentResponse> getMyStudentEnrollments(Authentication authentication) {
+        return enrollmentService.getEnrollmentsByStudentUsername(
+                authentication.getName()
+        );
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/teacher/me")
+    public List<EnrollmentResponse> getMyTeacherEnrollments(Authentication authentication) {
+        return enrollmentService.getEnrollmentsByTeacherUsername(
+                authentication.getName()
+        );
+    }
+
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     @PatchMapping("/{id}/status")
     public EnrollmentResponse updateStatus(
             @PathVariable String id,
-            @Valid @RequestBody UpdateEnrollmentStatusRequest request
+            @Valid @RequestBody UpdateEnrollmentStatusRequest request,
+            Authentication authentication
     ) {
-        return enrollmentService.updateStatus(id, request);
+
+        String currentRole = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .orElseThrow()
+                .getAuthority()
+                .replace("ROLE_", "");
+
+        return enrollmentService.updateStatus(
+                id,
+                request,
+                authentication.getName(),
+                currentRole
+        );
     }
 }

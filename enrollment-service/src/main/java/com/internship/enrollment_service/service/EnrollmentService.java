@@ -9,6 +9,7 @@ import com.internship.enrollment_service.exception.EnrollmentNotFoundException;
 import com.internship.enrollment_service.exception.InvalidEnrollmentStatusException;
 import com.internship.enrollment_service.repository.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,13 +30,14 @@ public class EnrollmentService {
                 );
 
         if (alreadyExists) {
-            throw new IllegalStateException("Student is already enrolled in this course");
+            throw new InvalidEnrollmentStatusException("Student is already enrolled in this course");
         }
 
         Enrollment enrollment = Enrollment.builder()
                 .courseId(event.getCourseId())
                 .studentUsername(event.getStudentUsername())
                 .status(EnrollmentStatus.PENDING)
+                .teacherUsername(event.getTeacherUsername())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -44,6 +46,13 @@ public class EnrollmentService {
 
     public List<EnrollmentResponse> getAllEnrollments() {
         return enrollmentRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public List<EnrollmentResponse> getEnrollmentsByTeacherUsername(String teacherUsername) {
+        return enrollmentRepository.findByTeacherUsername(teacherUsername)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -58,12 +67,22 @@ public class EnrollmentService {
 
     public EnrollmentResponse updateStatus(
             String enrollmentId,
-            UpdateEnrollmentStatusRequest request
+            UpdateEnrollmentStatusRequest request,
+            String currentUsername,
+            String currentRole
     ) {
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() ->
                         new EnrollmentNotFoundException("Enrollment not found"));
+
+        if (!currentRole.equals("ADMIN")
+                && !enrollment.getTeacherUsername().equals(currentUsername)) {
+
+            throw new AccessDeniedException(
+                    "You can update only enrollments for your own courses"
+            );
+        }
 
         EnrollmentStatus currentStatus = enrollment.getStatus();
         EnrollmentStatus newStatus = request.getStatus();
@@ -121,6 +140,7 @@ public class EnrollmentService {
                 .courseId(enrollment.getCourseId())
                 .studentUsername(enrollment.getStudentUsername())
                 .status(enrollment.getStatus())
+                .teacherUsername(enrollment.getTeacherUsername())
                 .createdAt(enrollment.getCreatedAt())
                 .build();
     }

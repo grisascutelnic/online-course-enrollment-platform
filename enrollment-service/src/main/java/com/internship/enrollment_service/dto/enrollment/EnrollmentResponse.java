@@ -22,5 +22,7 @@ public class EnrollmentResponse {
 
     private EnrollmentStatus status;
 
+    private String teacherUsername;
+
     private LocalDateTime createdAt;
 }

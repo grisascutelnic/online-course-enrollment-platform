@@ -19,5 +19,7 @@ public class EnrollmentRequestedEvent {
 
     private String studentUsername;
 
+    private String teacherUsername;
+
     private LocalDateTime requestedAt;
 }
