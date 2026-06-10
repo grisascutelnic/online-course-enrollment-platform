@@ -107,6 +107,13 @@ public class CourseService {
             throw new CourseEnrollmentException("No available seats for this course");
         }
 
+        course.setAvailableSeats(course.getAvailableSeats() - 1);
+        courseRepository.save(course);
+
+        if (course.getAvailableSeats() == 0) {
+            course.setStatus(CourseStatus.CLOSED);
+        }
+
         EnrollmentRequestedEvent event = EnrollmentRequestedEvent.builder()
                 .eventId(UUID.randomUUID().toString())
                 .courseId(course.getId())
