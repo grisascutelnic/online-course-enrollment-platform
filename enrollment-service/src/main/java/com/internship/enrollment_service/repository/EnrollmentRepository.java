@@ -1,6 +1,7 @@
 package com.internship.enrollment_service.repository;
 
 import com.internship.enrollment_service.entity.Enrollment;
+import com.internship.enrollment_service.enums.EnrollmentStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -10,11 +11,8 @@ public interface EnrollmentRepository extends MongoRepository<Enrollment, String
 
     List<Enrollment> findByStudentUsername(String studentUsername);
 
-    List<Enrollment> findByCourseId(String courseId);
-
-    Optional<Enrollment> findByStudentUsernameAndCourseId(String studentUsername, String courseId);
-
     boolean existsByStudentUsernameAndCourseId(String studentUsername, String courseId);
 
     List<Enrollment> findByTeacherUsername(String teacherUsername);
+
 }
