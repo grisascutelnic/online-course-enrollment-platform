@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/enrollments/course/*/stats").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

@@ -1,6 +1,7 @@
 package com.internship.enrollment_service.controller;
 
 import com.internship.enrollment_service.dto.enrollment.EnrollmentResponse;
+import com.internship.enrollment_service.dto.enrollment.EnrollmentStatsResponse;
 import com.internship.enrollment_service.dto.enrollment.UpdateEnrollmentStatusRequest;
 import com.internship.enrollment_service.service.EnrollmentService;
 import jakarta.validation.Valid;
@@ -61,5 +62,10 @@ public class EnrollmentController {
                 authentication.getName(),
                 currentRole
         );
+    }
+
+    @GetMapping("/course/{courseId}/stats")
+    public EnrollmentStatsResponse getStatsByCourseId(@PathVariable String courseId) {
+        return enrollmentService.getStatsByCourseId(courseId);
     }
 }

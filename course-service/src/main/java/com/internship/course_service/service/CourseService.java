@@ -1,7 +1,10 @@
 package com.internship.course_service.service;
 
+import com.internship.course_service.client.EnrollmentClient;
+import com.internship.course_service.dto.course.CourseStatsResponse;
 import com.internship.course_service.dto.course.CreateCourseRequest;
 import com.internship.course_service.dto.course.UpdateCourseRequest;
+import com.internship.course_service.dto.enrollment.EnrollmentStatsResponse;
 import com.internship.course_service.entity.Course;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.event.EnrollmentRequestedEvent;
@@ -20,11 +23,14 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final EnrollmentEventPublisher enrollmentEventPublisher;
+    private final EnrollmentClient enrollmentClient;
 
     public CourseService(CourseRepository courseRepository,
-                         EnrollmentEventPublisher enrollmentEventPublisher) {
+                         EnrollmentEventPublisher enrollmentEventPublisher,
+                         EnrollmentClient enrollmentClient) {
         this.courseRepository = courseRepository;
         this.enrollmentEventPublisher = enrollmentEventPublisher;
+        this.enrollmentClient = enrollmentClient;
     }
 
     public Course createCourse(
@@ -110,5 +116,19 @@ public class CourseService {
                 .build();
 
         enrollmentEventPublisher.publishEnrollmentRequested(event);
+    }
+
+    public CourseStatsResponse getCourseStats(String courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found"));
+
+        EnrollmentStatsResponse enrollmentStats =
+                enrollmentClient.getStatsByCourseId(courseId);
+
+        return new CourseStatsResponse(
+                course.getId(),
+                course.getTitle(),
+                enrollmentStats.getTotalEnrollments()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.internship.course_service.controller;
 
+import com.internship.course_service.dto.course.CourseStatsResponse;
 import com.internship.course_service.dto.course.CreateCourseRequest;
 import com.internship.course_service.dto.course.UpdateCourseRequest;
 import com.internship.course_service.entity.Course;
@@ -74,5 +75,11 @@ public class CourseController {
                 id,
                 authentication.getName()
         );
+    }
+
+    @GetMapping("/{id}/stats")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    public CourseStatsResponse getCourseStats(@PathVariable String id) {
+        return courseService.getCourseStats(id);
     }
 }

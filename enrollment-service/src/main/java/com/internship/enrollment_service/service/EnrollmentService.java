@@ -1,6 +1,7 @@
 package com.internship.enrollment_service.service;
 
 import com.internship.enrollment_service.dto.enrollment.EnrollmentResponse;
+import com.internship.enrollment_service.dto.enrollment.EnrollmentStatsResponse;
 import com.internship.enrollment_service.dto.enrollment.UpdateEnrollmentStatusRequest;
 import com.internship.enrollment_service.entity.Enrollment;
 import com.internship.enrollment_service.enums.EnrollmentStatus;
@@ -132,6 +133,15 @@ public class EnrollmentService {
                     "Cannot change status from final status " + currentStatus
             );
         }
+    }
+
+    public EnrollmentStatsResponse getStatsByCourseId(String courseId) {
+        Long totalEnrollments = enrollmentRepository.countByCourseId(courseId);
+
+        return new EnrollmentStatsResponse(
+                courseId,
+                totalEnrollments
+        );
     }
 
     private EnrollmentResponse mapToResponse(Enrollment enrollment) {
