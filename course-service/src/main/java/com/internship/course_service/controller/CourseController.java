@@ -48,21 +48,25 @@ public class CourseController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public Course updateCourse(@PathVariable String id,
-                               @RequestBody UpdateCourseRequest request) {
-        return courseService.updateCourse(id, request);
+                               @RequestBody UpdateCourseRequest request,
+                               Authentication authentication) {
+        return courseService.updateCourse(id, request, authentication);
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public Course updateStatus(@PathVariable String id,
-                               @RequestParam CourseStatus status) {
-        return courseService.updateStatus(id, status);
+                               @RequestParam CourseStatus status,
+                               Authentication authentication) {
+        return courseService.updateStatus(id, status, authentication);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public void deleteCourse(@PathVariable String id) {
-        courseService.deleteCourse(id);
+    public void deleteCourse(@PathVariable String id,
+                             Authentication authentication) {
+        courseService.deleteCourse(id, authentication);
     }
 
     @PostMapping("/{id}/enrollment-requests")
@@ -79,7 +83,8 @@ public class CourseController {
 
     @GetMapping("/{id}/stats")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public CourseStatsResponse getCourseStats(@PathVariable String id) {
-        return courseService.getCourseStats(id);
+    public CourseStatsResponse getCourseStats(@PathVariable String id,
+                                              Authentication authentication) {
+        return courseService.getCourseStats(id, authentication);
     }
 }

@@ -12,6 +12,7 @@ import com.internship.course_service.exception.CourseEnrollmentException;
 import com.internship.course_service.exception.CourseNotFoundException;
 import com.internship.course_service.publisher.EnrollmentEventPublisher;
 import com.internship.course_service.repository.CourseRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,9 +58,11 @@ public class CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("Course not found"));
     }
 
-    public Course updateCourse(String id, UpdateCourseRequest request) {
+    public Course updateCourse(String id, UpdateCourseRequest request, Authentication authentication) {
 
         Course course = getCourseById(id);
+
+        validateCourseAccess(course, authentication);
 
         if (request.getTitle() != null) {
             course.setTitle(request.getTitle());
@@ -80,17 +83,39 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Course updateStatus(String id, CourseStatus status) {
+    public Course updateStatus(String id, CourseStatus status, Authentication authentication) {
 
         Course course = getCourseById(id);
+
+        validateCourseAccess(course, authentication);
 
         course.setStatus(status);
 
         return courseRepository.save(course);
     }
 
-    public void deleteCourse(String id) {
+    public void deleteCourse(String id, Authentication authentication) {
+        Course course = getCourseById(id);
+
+        validateCourseAccess(course, authentication);
+
         courseRepository.deleteById(id);
+    }
+
+    private void validateCourseAccess(Course course, Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return;
+        }
+
+        String currentUsername = authentication.getName();
+
+        if (!course.getTeacherUsername().equals(currentUsername)) {
+            throw new CourseEnrollmentException("You are not allowed to modify this course");
+        }
     }
 
     public void requestEnrollment(
@@ -125,9 +150,11 @@ public class CourseService {
         enrollmentEventPublisher.publishEnrollmentRequested(event);
     }
 
-    public CourseStatsResponse getCourseStats(String courseId) {
+    public CourseStatsResponse getCourseStats(String courseId, Authentication authentication) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Course not found"));
+
+        validateCourseAccess(course, authentication);
 
         EnrollmentStatsResponse enrollmentStats =
                 enrollmentClient.getStatsByCourseId(courseId);
