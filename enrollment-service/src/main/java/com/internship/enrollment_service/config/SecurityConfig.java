@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/enrollments/course/*/stats").permitAll()
+                        .requestMatchers("/enrollments/course/*/stats", "/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
