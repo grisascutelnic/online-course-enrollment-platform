@@ -68,4 +68,10 @@ public class EnrollmentController {
     public EnrollmentStatsResponse getStatsByCourseId(@PathVariable String courseId) {
         return enrollmentService.getStatsByCourseId(courseId);
     }
+
+    @GetMapping("/exists")
+    public boolean existsEnrollment(@RequestParam String courseId,
+                                    @RequestParam String studentUsername) {
+        return enrollmentService.existsEnrollment(courseId, studentUsername);
+    }
 }

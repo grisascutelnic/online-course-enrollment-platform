@@ -128,16 +128,28 @@ public class CourseService {
             throw new CourseEnrollmentException("Course is not open for enrollment");
         }
 
+        boolean alreadyRequested = enrollmentClient.existsEnrollment(
+                courseId,
+                studentUsername
+        );
+
+        if (alreadyRequested) {
+            throw new CourseEnrollmentException(
+                    "Student already requested enrollment for this course"
+            );
+        }
+
         if (course.getAvailableSeats() == null || course.getAvailableSeats() <= 0) {
             throw new CourseEnrollmentException("No available seats for this course");
         }
 
         course.setAvailableSeats(course.getAvailableSeats() - 1);
-        courseRepository.save(course);
 
         if (course.getAvailableSeats() == 0) {
             course.setStatus(CourseStatus.CLOSED);
         }
+
+        courseRepository.save(course);
 
         EnrollmentRequestedEvent event = EnrollmentRequestedEvent.builder()
                 .eventId(UUID.randomUUID().toString())

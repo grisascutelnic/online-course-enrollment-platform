@@ -16,4 +16,6 @@ public interface EnrollmentRepository extends MongoRepository<Enrollment, String
     List<Enrollment> findByTeacherUsername(String teacherUsername);
 
     Long countByCourseId(String courseId);
+
+    boolean existsByCourseIdAndStudentUsername(String courseId, String studentUsername);
 }

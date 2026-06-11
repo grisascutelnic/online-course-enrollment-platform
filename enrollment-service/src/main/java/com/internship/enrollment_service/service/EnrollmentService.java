@@ -22,7 +22,7 @@ public class EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepository;
 
-    public Enrollment createEnrollmentFromEvent(EnrollmentRequestedEvent event) {
+    public void createEnrollmentFromEvent(EnrollmentRequestedEvent event) {
 
         boolean alreadyExists = enrollmentRepository
                 .existsByStudentUsernameAndCourseId(
@@ -31,7 +31,7 @@ public class EnrollmentService {
                 );
 
         if (alreadyExists) {
-            throw new InvalidEnrollmentStatusException("Student is already enrolled in this course");
+            return;
         }
 
         Enrollment enrollment = Enrollment.builder()
@@ -42,9 +42,15 @@ public class EnrollmentService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return enrollmentRepository.save(enrollment);
+        enrollmentRepository.save(enrollment);
     }
 
+    public boolean existsEnrollment(String courseId, String studentUsername) {
+        return enrollmentRepository.existsByCourseIdAndStudentUsername(
+                courseId,
+                studentUsername
+        );
+    }
     public List<EnrollmentResponse> getAllEnrollments() {
         return enrollmentRepository.findAll()
                 .stream()
