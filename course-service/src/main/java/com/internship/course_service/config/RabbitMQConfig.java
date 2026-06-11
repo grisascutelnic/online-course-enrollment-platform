@@ -15,7 +15,7 @@ public class RabbitMQConfig {
     public static final String ENROLLMENT_EXCHANGE = "enrollment.exchange";
     public static final String ENROLLMENT_REQUESTED_QUEUE = "enrollment.requested.queue";
     public static final String ENROLLMENT_REQUESTED_ROUTING_KEY = "enrollment.requested";
-    // ^ exchange foloseste aceasta metoda pentru a decide in ce coada sa trimita mesajul
+    // ^ the exchange uses this mechanism to determine which queue should receive the message.**
 
 
     // creates RabbitMQ administrator used to manage queues, exchanges, and bindings.
@@ -24,7 +24,7 @@ public class RabbitMQConfig {
         return new RabbitAdmin(connectionFactory);
     }
 
-    //postar, exista direct, fanout(la toti), topic (foloseste patternuri)
+    // there are Direct, Fanout (sends messages to all queues), and Topic (uses patterns for routing)
     @Bean
     public DirectExchange enrollmentExchange() {
         return new DirectExchange(ENROLLMENT_EXCHANGE);

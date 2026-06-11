@@ -36,7 +36,10 @@ public class SecurityConfig {
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/courses/**", "/test/**").permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET, "/courses/**",
+                                "/test/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

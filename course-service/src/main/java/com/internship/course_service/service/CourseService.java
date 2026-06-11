@@ -114,7 +114,7 @@ public class CourseService {
         String currentUsername = authentication.getName();
 
         if (!course.getTeacherUsername().equals(currentUsername)) {
-            throw new CourseEnrollmentException("You are not allowed to modify this course");
+            throw new CourseEnrollmentException("You are not allowed to access this course");
         }
     }
 

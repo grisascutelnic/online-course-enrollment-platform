@@ -29,23 +29,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        //se ia tokinul din request
+        //get the token from the request
         final String authHeader = request.getHeader("Authorization");
 
-        //verifica daca exista token, daca nu, nu se blocheaza, pe urma se decide daca e public/protejat
+        //check if the token exists; if not, do not block the request,
+        //the public/protected access will be decided later
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        //se scoate token curat de 7 caractere, si username-ul
+        //remove the "Bearer " prefix from the token
         final String jwt = authHeader.substring(7);
         final String username = jwtService.extractUsername(jwt);
 
-        //se verifica daca nu e user autentificat
+        //check if there is no authenticated user in the SecurityContext
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-            //cauta user in bd
+            //load the user details from the database
             UserDetails userDetails =
                     customUserDetailsService.loadUserByUsername(username);
 
@@ -62,12 +63,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request)
                 );
-                //aici spring security afla, pentru acest request, userul este x
+                //tell Spring Security that the authenticated user for this request is X
                 SecurityContextHolder.getContext()
                         .setAuthentication(authToken);
             }
         }
-        //requestul este trimis spre controller
+        //pass the request to the next filter or controller
         filterChain.doFilter(request, response);
     }
 }

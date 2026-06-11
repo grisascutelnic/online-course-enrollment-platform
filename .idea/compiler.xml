@@ -11,6 +11,7 @@
         <module name="config-server" />
         <module name="eureka-server" />
         <module name="enrollment-service" />
+        <module name="gateway" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +21,7 @@
       <module name="course-service" options="-parameters" />
       <module name="enrollment-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="gateway" options="-parameters" />
     </option>
   </component>
 </project>
