@@ -115,14 +115,6 @@ Enrollment Service
 
 Course Service uses OpenFeign to retrieve enrollment statistics from Enrollment Service.
 
-Flow:
-
-```text
-Course Service
-      ↓
-Enrollment Service
-```
-
 ---
 
 ## Security
