@@ -33,6 +33,12 @@ services:
       CONFIG_REPO_PATH: file:/app/config-repo
     volumes:
       - ./config-repo:/app/config-repo
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   eureka-server:
     build:
@@ -43,12 +49,19 @@ services:
       - "8761:8761"
     depends_on:
       - config-server
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   course-service:
     build:
       context: ./course-service
     image: course-service:latest
     container_name: course-service
+    restart: on-failure
     ports:
       - "8081:8081"
     env_file:
@@ -70,6 +83,7 @@ services:
       context: ./enrollment-service
     image: enrollment-service:latest
     container_name: enrollment-service
+    restart: on-failure
     ports:
       - "8082:8082"
     env_file:
@@ -91,6 +105,7 @@ services:
       context: ./gateway
     image: gateway:latest
     container_name: gateway
+    restart: on-failure
     ports:
       - "8080:8080"
     environment:
@@ -98,11 +113,14 @@ services:
       CONFIG_SERVER_URL: http://config-server:8888
       EUREKA_URL: http://eureka-server:8761/eureka/
     depends_on:
-      - config-server
-      - eureka-server
-      - course-service
-      - enrollment-service
-
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      course-service:
+        condition: service_started
+      enrollment-service:
+        condition: service_started
 volumes:
   mongo-course-data:
   mongo-enrollment-data:
