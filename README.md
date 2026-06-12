@@ -223,7 +223,7 @@ docker build -t gateway .
 ### Start the Platform
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
 ### Stop the Platform
@@ -252,6 +252,12 @@ docker compose down
 
 ## API Examples
 
+Base URL through Gateway:
+
+```text
+http://localhost:8080
+```
+
 ### Authentication
 
 ```http
@@ -259,10 +265,40 @@ POST /auth/register
 POST /auth/login
 ```
 
+Example register body:
+
+```json
+{
+  "username": "student1",
+  "email": "student1@example.com",
+  "password": "student123"
+}
+```
+
+Example login body:
+
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+
+Expected result: a JWT token is returned and can be used as a Bearer Token.
+
 ### User Management
 
 ```http
-PATCH /users/{id}/role
+GET /users
+PUT /users/{id}/role
+```
+
+Example role update body:
+
+```json
+{
+  "role": "TEACHER"
+}
 ```
 
 ### Course Management
@@ -274,23 +310,56 @@ GET /courses/{id}
 PUT /courses/{id}
 DELETE /courses/{id}
 PATCH /courses/{id}/status
+GET /courses/{id}/stats
+POST /courses/{id}/enrollment-requests
 ```
+
+Example create course body:
+
+```json
+{
+  "title": "Java Basics",
+  "description": "Introduction to Java and Spring Boot",
+  "availableSeats": 10
+}
+```
+
+Expected result: a course is created with status `OPEN`.
 
 ### Enrollment Management
 
 ```http
-POST /courses/{id}/enrollment-requests
 GET /enrollments
+GET /enrollments/student/me
+GET /enrollments/teacher/me
 GET /enrollments/course/{courseId}/stats
+GET /enrollments/exists?courseId={courseId}&studentUsername={studentUsername}
 PATCH /enrollments/{id}/status
 ```
+
+Example status update body:
+
+```json
+{
+  "status": "APPROVED"
+}
+```
+
+Expected result: the enrollment status is updated according to the allowed workflow.
 
 ---
 
 ## Postman Collection
 
+Import the Postman collection from:
 
-
+```text
+postman/online-course-enrollment-platform.postman_collection.json
+```
+Import the Postman environment from:
+```text
+postman/online-course-enrollment-platform.postman_environment.json
+```
 The collection contains:
 
 * Authentication requests
@@ -298,6 +367,14 @@ The collection contains:
 * Course management requests
 * Enrollment management requests
 
+
+Authentication setup in Postman:
+
+1. Send `POST /auth/login`.
+2. Copy the `token` from the response.
+3. Open the Authorization tab.
+4. Select `Bearer Token`.
+5. Paste the JWT token.
 
 ---
 
