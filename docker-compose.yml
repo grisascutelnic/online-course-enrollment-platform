@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongo-course:
     image: mongo:8
@@ -23,6 +21,87 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  config-server:
+    build:
+      context: ./config-server
+    image: config-server:latest
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    environment:
+      CONFIG_REPO_PATH: file:/app/config-repo
+    volumes:
+      - ./config-repo:/app/config-repo
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+    image: eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+
+  course-service:
+    build:
+      context: ./course-service
+    image: course-service:latest
+    container_name: course-service
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./course-service/.env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      MONGO_URI: mongodb://mongo-course:27017/course_db
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - config-server
+      - eureka-server
+      - mongo-course
+      - rabbitmq
+
+  enrollment-service:
+    build:
+      context: ./enrollment-service
+    image: enrollment-service:latest
+    container_name: enrollment-service
+    ports:
+      - "8082:8082"
+    env_file:
+      - ./enrollment-service/.env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      MONGO_URI: mongodb://mongo-enrollment:27017/enrollment_db
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - config-server
+      - eureka-server
+      - mongo-enrollment
+      - rabbitmq
+
+  gateway:
+    build:
+      context: ./gateway
+    image: gateway:latest
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    depends_on:
+      - config-server
+      - eureka-server
+      - course-service
+      - enrollment-service
 
 volumes:
   mongo-course-data:
