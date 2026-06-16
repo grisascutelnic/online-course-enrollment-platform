@@ -46,12 +46,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/login",
+							"raw": "http://localhost:8080/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -75,12 +75,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/register",
+							"raw": "http://localhost:8080/auth/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"register"
@@ -125,12 +125,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/login",
+							"raw": "http://localhost:8080/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -154,12 +154,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/register",
+							"raw": "http://localhost:8080/auth/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"register"
@@ -204,12 +204,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/login",
+							"raw": "http://localhost:8080/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -233,12 +233,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/register",
+							"raw": "http://localhost:8080/auth/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"register"
@@ -283,12 +283,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/login",
+							"raw": "http://localhost:8080/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -312,12 +312,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/register",
+							"raw": "http://localhost:8080/auth/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"register"
@@ -362,12 +362,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/auth/login",
+							"raw": "http://localhost:8080/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -389,7 +389,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4MTA5ODE2MiwiZXhwIjoxNzgxMTg0NTYyfQ.76wLxCNdMa9l4w9zhpyZw5oPCVeQzudF2EiFpAunMww",
+									"value": "{{adminToken}}",
 									"type": "string"
 								}
 							]
@@ -397,12 +397,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/users",
+							"raw": "http://localhost:8080/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"users"
 							]
@@ -436,12 +436,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/users/6a281b784e8a35e433d77a27/role",
+							"raw": "http://localhost:8080/users/6a281b784e8a35e433d77a27/role",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"users",
 								"6a281b784e8a35e433d77a27",
@@ -464,7 +464,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZWFjaGVyMSIsInJvbGUiOiJURUFDSEVSIiwiaWF0IjoxNzgxMDk4MTc4LCJleHAiOjE3ODExODQ1Nzh9.xU13G1iBK5a8jl4u6lRXa42cQal02M7j9sAk-NAugN0",
+									"value": "{{teacher1Token}}",
 									"type": "string"
 								}
 							]
@@ -473,7 +473,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Teacher1Cours3\",\n  \"description\": \"Introduction to Curs4\",\n  \"availableSeats\": 25\n}",
+							"raw": "{\n  \"title\": \"Teacher1Course6\",\n  \"description\": \"Introduction to Course6\",\n  \"availableSeats\": 25\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -481,12 +481,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses",
+							"raw": "http://localhost:8080/courses",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses"
 							]
@@ -502,7 +502,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZWFjaGVyMiIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzgxMDEzMzg4LCJleHAiOjE3ODEwOTk3ODh9.a1sYWLfJgFquUWLr2WwkmZqzlG2Oaq5pbG7mFFtjOms",
+									"value": "{{teacher2Token}}",
 									"type": "string"
 								}
 							]
@@ -511,7 +511,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Teacher2Cours1\",\n  \"description\": \"Introduction to Curs1\",\n  \"availableSeats\": 25\n}",
+							"raw": "{\n  \"title\": \"Teacher2Cours5\",\n  \"description\": \"Introduction to Curs5\",\n  \"availableSeats\": 25\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -519,12 +519,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses",
+							"raw": "http://localhost:8080/courses",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses"
 							]
@@ -541,12 +541,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/courses",
+							"raw": "http://localhost:8080/courses",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses"
 							]
@@ -572,15 +572,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses/6a217ee72adf757f8d245d01",
+							"raw": "http://localhost:8080/courses/6a2bd7fd764d8d2297407211",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
-								"6a217ee72adf757f8d245d01"
+								"6a2bd7fd764d8d2297407211"
 							]
 						}
 					},
@@ -594,7 +594,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZWFjaGVyMSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzgxMDEzMjcwLCJleHAiOjE3ODEwOTk2NzB9.b-SVE_AoU_vCtZ3WpAOpB6xYejUrliWAeiHA4HvXdi8",
+									"value": "{{teacher1Token}}",
 									"type": "string"
 								}
 							]
@@ -603,7 +603,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"OOP\",\n    \"description\": \"Introduction to OOP...\",\n    \"availableSeats\": 20,\n    \"status\": \"OPEN\"\n}",
+							"raw": "    {\n        \"title\": \"Teacher1Course4\",\n        \"description\": \"Introduction to Course4 Modified x4\",\n        \"availableSeats\": 23,\n        \"status\": \"OPEN\"\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -611,15 +611,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses/6a281df34e8a35e433d77a2d",
+							"raw": "http://localhost:8080/courses/6a296791a6adfca99cbfb561",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
-								"6a281df34e8a35e433d77a2d"
+								"6a296791a6adfca99cbfb561"
 							]
 						}
 					},
@@ -650,12 +650,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses/6a2bd7fd764d8d2297407211/status?status=CLOSED",
+							"raw": "http://localhost:8080/courses/6a2bd7fd764d8d2297407211/status?status=CLOSED",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
 								"6a2bd7fd764d8d2297407211",
@@ -696,12 +696,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/courses/6a22c2f34b48c5b006ea9ad1",
+							"raw": "http://localhost:8080/courses/6a22c2f34b48c5b006ea9ad1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
 								"6a22c2f34b48c5b006ea9ad1"
@@ -726,12 +726,12 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/courses/6a2811cb4e8a35e433d77a23/enrollment-requests",
+							"raw": "http://localhost:8080/courses/6a2811cb4e8a35e433d77a23/enrollment-requests",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
 								"6a2811cb4e8a35e433d77a23",
@@ -757,12 +757,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/courses/6a281deb4e8a35e433d77a2c/stats",
+							"raw": "http://localhost:8080/courses/6a281deb4e8a35e433d77a2c/stats",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"courses",
 								"6a281deb4e8a35e433d77a2c",
@@ -780,15 +780,25 @@
 				{
 					"name": "Get all enrollments",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/enrollments",
+							"raw": "http://localhost:8080/enrollments",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments"
 							]
@@ -812,12 +822,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/enrollments/student/me",
+							"raw": "http://localhost:8080/enrollments/student/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments",
 								"student",
@@ -843,12 +853,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/enrollments/student/me",
+							"raw": "http://localhost:8080/enrollments/student/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments",
 								"student",
@@ -874,12 +884,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/enrollments/teacher/me",
+							"raw": "http://localhost:8080/enrollments/teacher/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments",
 								"teacher",
@@ -914,15 +924,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/enrollments/6a296271ef5044c67c91b74a/status",
+							"raw": "http://localhost:8080/enrollments/6a2bd8c7a20a4eda1e9d4709/status",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments",
-								"6a296271ef5044c67c91b74a",
+								"6a2bd8c7a20a4eda1e9d4709",
 								"status"
 							]
 						}
@@ -938,12 +948,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/enrollments/course/6a281d804e8a35e433d77a29/stats",
+							"raw": "http://localhost:8080/enrollments/course/6a281d804e8a35e433d77a29/stats",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"enrollments",
 								"course",
