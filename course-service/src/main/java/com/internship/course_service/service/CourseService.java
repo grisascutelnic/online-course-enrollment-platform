@@ -1,11 +1,13 @@
 package com.internship.course_service.service;
 
 import com.internship.course_service.client.EnrollmentClient;
+import com.internship.course_service.dto.course.CourseModuleRequest;
 import com.internship.course_service.dto.course.CourseStatsResponse;
 import com.internship.course_service.dto.course.CreateCourseRequest;
 import com.internship.course_service.dto.course.UpdateCourseRequest;
 import com.internship.course_service.dto.enrollment.EnrollmentStatsResponse;
 import com.internship.course_service.entity.Course;
+import com.internship.course_service.entity.CourseModule;
 import com.internship.course_service.enums.CourseStatus;
 import com.internship.course_service.event.EnrollmentRequestedEvent;
 import com.internship.course_service.exception.CourseEnrollmentException;
@@ -40,8 +42,15 @@ public class CourseService {
     ) {
 
         Course course = new Course();
+
         course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
+        course.setCategory(request.getCategory());
+        course.setDifficulty(request.getDifficulty());
+        course.setPrerequisites(request.getPrerequisites());
+        course.setSkillsYouWillLearn(request.getSkillsYouWillLearn());
+        course.setModules(mapModules(request.getModules()));
+        course.setDurationInWeeks(request.getDurationInWeeks());
         course.setAvailableSeats(request.getAvailableSeats());
         course.setStatus(CourseStatus.OPEN);
         course.setTeacherUsername(teacherUsername);
@@ -72,12 +81,38 @@ public class CourseService {
             course.setDescription(request.getDescription());
         }
 
-        if (request.getAvailableSeats() != null) {
-            course.setAvailableSeats(request.getAvailableSeats());
+        if (request.getCategory() != null) {
+            course.setCategory(request.getCategory());
         }
 
-        if (request.getStatus() != null) {
-            course.setStatus(request.getStatus());
+        if (request.getDifficulty() != null) {
+            course.setDifficulty(request.getDifficulty());
+        }
+
+        if (request.getPrerequisites() != null) {
+            course.setPrerequisites(request.getPrerequisites());
+        }
+
+        if (request.getSkillsYouWillLearn() != null) {
+            course.setSkillsYouWillLearn(request.getSkillsYouWillLearn());
+        }
+
+        if (request.getModules() != null) {
+            course.setModules(mapModules(request.getModules()));
+        }
+
+        if (request.getDurationInWeeks() != null) {
+            course.setDurationInWeeks(request.getDurationInWeeks());
+        }
+
+        if (request.getAvailableSeats() != null) {
+            course.setAvailableSeats(request.getAvailableSeats());
+
+            if (request.getAvailableSeats() > 0) {
+                course.setStatus(CourseStatus.OPEN);
+            } else {
+                course.setStatus(CourseStatus.CLOSED);
+            }
         }
 
         return courseRepository.save(course);
@@ -176,5 +211,22 @@ public class CourseService {
                 course.getTitle(),
                 enrollmentStats.getTotalEnrollments()
         );
+    }
+
+    private List<CourseModule> mapModules(List<CourseModuleRequest> moduleRequests) {
+        if (moduleRequests == null) {
+            return null;
+        }
+
+        return moduleRequests.stream()
+                .map(moduleRequest -> new CourseModule(
+                        moduleRequest.getOrder(),
+                        moduleRequest.getTitle(),
+                        moduleRequest.getContent(),
+                        moduleRequest.getSummary(),
+                        moduleRequest.getTopics(),
+                        moduleRequest.getEstimatedHours()
+                ))
+                .toList();
     }
 }
