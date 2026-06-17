@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Course Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="chat-shell" aria-label="AI Course Assistant chat">
+        <header class="chat-header">
+            <h1>AI Course Assistant</h1>
+            <p>Ask questions about courses, modules, enrollment, and learning paths.</p>
+        </header>
+
+        <section id="messageArea" class="message-area" aria-live="polite">
+            <div class="message assistant-message">
+                <p>Hello. How can I help you with your courses today?</p>
+            </div>
+        </section>
+
+        <form id="chatForm" class="chat-form">
+            <label class="sr-only" for="messageInput">Message</label>
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Type your question..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit">Send</button>
+        </form>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

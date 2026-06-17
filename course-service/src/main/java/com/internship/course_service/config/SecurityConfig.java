@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 HttpMethod.GET, "/courses/**",
                                 "/test/**"
                         ).permitAll()
+                        .requestMatchers("/ai/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

@@ -33,7 +33,6 @@ public class CreateCourseRequest {
     @NotEmpty(message = "Skills are required")
     private List<String> skillsYouWillLearn;
 
-    @NotEmpty(message = "Modules are required")
     @Valid
     private List<CourseModuleRequest> modules;
 
