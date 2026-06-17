@@ -4,13 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Course Assistant</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
-    <main class="chat-shell" aria-label="AI Course Assistant chat">
+    <main id="loginView" class="login-shell" aria-label="AI Course Assistant login">
+        <section class="login-panel">
+            <header class="login-header">
+                <h1>AI Course Assistant</h1>
+                <p>Sign in to continue to your course assistant.</p>
+            </header>
+
+            <form id="loginForm" class="login-form">
+                <div class="field-group">
+                    <label for="usernameInput">Username</label>
+                    <input
+                        id="usernameInput"
+                        type="text"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="field-group">
+                    <label for="passwordInput">Password</label>
+                    <input
+                        id="passwordInput"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <p id="loginError" class="login-error" role="alert"></p>
+
+                <button id="loginButton" type="submit">Login</button>
+            </form>
+        </section>
+    </main>
+
+    <main id="chatView" class="chat-shell hidden" aria-label="AI Course Assistant chat">
         <header class="chat-header">
-            <h1>AI Course Assistant</h1>
-            <p>Ask questions about courses, modules, enrollment, and learning paths.</p>
+            <div>
+                <h1>AI Course Assistant</h1>
+                <p>Ask questions about courses, modules, enrollment, and learning paths.</p>
+            </div>
+            <button id="logoutButton" class="logout-button" type="button">Logout</button>
         </header>
 
         <section id="messageArea" class="message-area" aria-live="polite">
@@ -32,6 +70,6 @@
         </form>
     </main>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=11"></script>
 </body>
 </html>
