@@ -1,6 +1,8 @@
 package com.internship.course_service.ai.service;
 
 import com.internship.course_service.ai.tools.CourseTools;
+import com.internship.course_service.ai.tools.StudentTools;
+import com.internship.course_service.ai.tools.TeacherTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -15,11 +17,17 @@ public class AiChatService {
     public AiChatService(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-            CourseTools courseTools
+            CourseTools courseTools,
+            StudentTools studentTools,
+            TeacherTools teacherTools
     ) {
         this.chatClient = chatClientBuilder
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .defaultTools(courseTools)
+                .defaultTools(
+                        courseTools,
+                        studentTools,
+                        teacherTools
+                )
                 .build();
     }
 
