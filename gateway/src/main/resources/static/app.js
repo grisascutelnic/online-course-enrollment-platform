@@ -177,6 +177,12 @@ function appendFormattedBlocks(parent, text) {
             return;
         }
 
+        if (trimmedLine === "-") {
+            flushCurrentParagraph();
+            list = null;
+            return;
+        }
+
         if (headingMatch) {
             flushCurrentParagraph();
             flushCurrentTable();
@@ -236,7 +242,8 @@ function normalizeMarkdownText(text) {
     return String(text || "")
         .replace(/\r\n/g, "\n")
         .replace(/\u00a0/g, " ")
-        .replace(/\s+(?=(?:\*\*)?(Category|Difficulty|Duration|Available Seats|Status|Description|Prerequisites|Skills You Will Learn|Course Modules|Total estimated study time|Total estimated hours)(?:\*\*)?:)/gi, "\n");
+        .replace(/\s+(?=(?:\*\*)?(Category|Difficulty|Duration|Available Seats|Status|Description|Prerequisites|Skills You Will Learn|Course Modules|Total estimated study time|Total estimated hours)(?:\*\*)?:)/gi, "\n")
+        .replace(/\s*-\s*\n(?=(?:\*\*)?(Category|Difficulty|Duration|Available Seats|Status)(?:\*\*)?:)/gi, "\n");
 }
 
 function splitInlineTableRows(line) {
@@ -282,7 +289,7 @@ function flushParagraph(parent, paragraphLines) {
 }
 
 function flushTable(parent, tableLines) {
-    const rows = tableLines
+    let rows = tableLines
         .map(parseTableRow)
         .filter(function (row) {
             return row.length && !row.every(isDividerCell);
@@ -291,6 +298,8 @@ function flushTable(parent, tableLines) {
     if (!rows.length) {
         return;
     }
+
+    rows = normalizeComparisonTableRows(rows);
 
     const table = document.createElement("table");
     const body = document.createElement("tbody");
@@ -311,6 +320,24 @@ function flushTable(parent, tableLines) {
 
     table.appendChild(body);
     parent.appendChild(table);
+}
+
+function normalizeComparisonTableRows(rows) {
+    const maxColumns = Math.max.apply(null, rows.map(function (row) {
+        return row.length;
+    }));
+
+    if (rows.length > 1 && rows[0].length === maxColumns - 1) {
+        return rows.map(function (row, rowIndex) {
+            if (rowIndex === 0) {
+                return [""].concat(row);
+            }
+
+            return row;
+        });
+    }
+
+    return rows;
 }
 
 function parseTableRow(line) {
@@ -359,9 +386,12 @@ function appendPlainTextWithFieldBreaks(parent, text) {
     for (let i = 1; i < parts.length; i += 2) {
         const label = parts[i] + ":";
         const value = parts[i + 1] || "";
+        const strong = document.createElement("strong");
 
         appendBreakBeforeFieldLabel(parent, label);
-        parent.appendChild(document.createTextNode(label + value));
+        strong.textContent = label;
+        parent.appendChild(strong);
+        parent.appendChild(document.createTextNode(value));
     }
 }
 
