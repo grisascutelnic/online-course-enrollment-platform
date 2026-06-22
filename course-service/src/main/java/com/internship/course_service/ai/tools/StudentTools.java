@@ -2,8 +2,8 @@ package com.internship.course_service.ai.tools;
 
 import com.internship.course_service.ai.dto.EnrollmentAiResponse;
 import com.internship.course_service.client.EnrollmentClient;
+import com.internship.course_service.dto.enrollment.EnrollmentResponse;
 import com.internship.course_service.entity.Course;
-import com.internship.course_service.entity.CourseModule;
 import com.internship.course_service.exception.CourseNotFoundException;
 import com.internship.course_service.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +60,40 @@ public class StudentTools {
         return "Enrollment request submitted successfully for course: "
                 + course.getTitle()
                 + ". Status: PENDING.";
+    }
+
+    @Tool(description = """
+        Delete the logged-in student's enrollment request for a specific course.
+
+        Use this tool only when the student clearly asks to cancel, delete,
+        remove, or withdraw their enrollment request.
+
+        The input can be a course title, partial title, or course id.
+        The student is identified automatically from the JWT token.
+        """)
+    public String deleteMyEnrollment(String courseIdentifier) {
+        String normalizedIdentifier = normalize(courseIdentifier);
+
+        EnrollmentResponse enrollment = enrollmentClient.getMyStudentEnrollments()
+                .stream()
+                .filter(existingEnrollment -> {
+                    Course course = courseService.getCourseById(
+                            existingEnrollment.getCourseId()
+                    );
+
+                    return contains(course.getId(), normalizedIdentifier)
+                            || contains(course.getTitle(), normalizedIdentifier);
+                })
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Enrollment request not found"));
+
+        Course course = courseService.getCourseById(enrollment.getCourseId());
+
+        enrollmentClient.deleteMyEnrollment(enrollment.getId());
+
+        return "Enrollment request deleted successfully for course: "
+                + course.getTitle()
+                + ".";
     }
 
     @Tool(description = """

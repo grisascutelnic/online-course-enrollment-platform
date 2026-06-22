@@ -40,6 +40,10 @@ public class SecurityConfig {
                                 HttpMethod.GET, "/courses/**",
                                 "/test/**"
                         ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/courses/*/restore-seat"
+                        ).permitAll()
                         .requestMatchers("/ai/**").authenticated()
                         .anyRequest().authenticated()
                 )

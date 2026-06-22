@@ -117,6 +117,32 @@ Course Service uses OpenFeign to retrieve enrollment statistics from Enrollment 
 
 ---
 
+## Spring AI Tools
+
+Course Service exposes several Spring AI tools for course discovery and role-based actions.
+
+### Course Tools
+
+* `searchCourses` - searches open courses by keyword.
+* `explainCourse` - returns detailed information about a course.
+* `compareCourses` - compares two or more courses.
+
+### Student Tools
+
+* `requestEnrollment` - requests enrollment in a course after student confirmation.
+* `deleteMyEnrollment` - cancels the student's enrollment request for a course.
+* `getMyEnrollments` - returns the student's enrollment requests and statuses.
+
+### Teacher Tools
+
+* `getTeacherEnrollments` - returns enrollment requests for the logged-in teacher.
+* `updateEnrollmentStatus` - updates a student's enrollment status.
+* `getMyCourseStats` - returns the teacher's courses with enrollment statistics.
+
+Role-based tools use the authenticated JWT user, so usernames are not requested manually where they can be taken from the token.
+
+---
+
 ## Security
 
 Authentication is implemented using JWT.

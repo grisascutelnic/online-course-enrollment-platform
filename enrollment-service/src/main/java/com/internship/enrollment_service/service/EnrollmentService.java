@@ -1,5 +1,6 @@
 package com.internship.enrollment_service.service;
 
+import com.internship.enrollment_service.client.CourseClient;
 import com.internship.enrollment_service.dto.enrollment.EnrollmentResponse;
 import com.internship.enrollment_service.dto.enrollment.EnrollmentStatsResponse;
 import com.internship.enrollment_service.dto.enrollment.UpdateEnrollmentStatusRequest;
@@ -21,6 +22,7 @@ import java.util.List;
 public class EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepository;
+    private final CourseClient courseClient;
 
     public void createEnrollmentFromEvent(EnrollmentRequestedEvent event) {
 
@@ -148,6 +150,27 @@ public class EnrollmentService {
                 courseId,
                 totalEnrollments
         );
+    }
+
+    public void deleteEnrollmentByStudent(
+            String enrollmentId,
+            String studentUsername
+    ) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() ->
+                        new EnrollmentNotFoundException("Enrollment not found"));
+
+        if (!enrollment.getStudentUsername().equals(studentUsername)) {
+            throw new RuntimeException(
+                    "You are not allowed to delete this enrollment"
+            );
+        }
+
+        String courseId = enrollment.getCourseId();
+
+        enrollmentRepository.delete(enrollment);
+
+        courseClient.restoreSeat(courseId);
     }
 
     private EnrollmentResponse mapToResponse(Enrollment enrollment) {

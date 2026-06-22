@@ -34,4 +34,7 @@ public interface EnrollmentClient {
             @PathVariable String id,
             @RequestBody UpdateEnrollmentStatusRequest request
     );
+
+    @DeleteMapping("/enrollments/{id}")
+    void deleteMyEnrollment(@PathVariable String id);
 }

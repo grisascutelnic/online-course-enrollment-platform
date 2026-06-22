@@ -229,4 +229,13 @@ public class CourseService {
                 ))
                 .toList();
     }
+
+    public void restoreSeat(String courseId) {
+        Course course = getCourseById(courseId);
+
+        course.setAvailableSeats(course.getAvailableSeats() + 1);
+        course.setStatus(CourseStatus.OPEN);
+
+        courseRepository.save(course);
+    }
 }

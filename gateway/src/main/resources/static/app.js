@@ -10,6 +10,7 @@ const chatForm = document.getElementById("chatForm");
 const messageInput = document.getElementById("messageInput");
 const messageArea = document.getElementById("messageArea");
 const sendButton = chatForm.querySelector("button");
+const initialMessageMarkup = messageArea.innerHTML;
 
 const tokenKey = "jwtToken";
 
@@ -58,6 +59,7 @@ loginForm.addEventListener("submit", async function (event) {
 
         localStorage.setItem(tokenKey, data.token);
         passwordInput.value = "";
+        resetConversation();
         showChat();
     } catch (error) {
         showLoginError(error.message || "Login failed. Please try again.");
@@ -69,6 +71,7 @@ loginForm.addEventListener("submit", async function (event) {
 
 logoutButton.addEventListener("click", function () {
     localStorage.removeItem(tokenKey);
+    resetConversation();
     showLogin();
 });
 
@@ -111,6 +114,7 @@ chatForm.addEventListener("submit", async function (event) {
         if (response.status === 401 || response.status === 403) {
             removeLoadingMessage(loadingMessage);
             localStorage.removeItem(tokenKey);
+            resetConversation();
             showLogin();
             showLoginError("Your session expired. Please login again.");
             return;
@@ -456,6 +460,12 @@ function showLogin() {
     loginView.classList.remove("hidden");
     showLoginError("");
     usernameInput.focus();
+}
+
+function resetConversation() {
+    messageArea.innerHTML = initialMessageMarkup;
+    messageInput.value = "";
+    setChatFormLoading(false);
 }
 
 function showLoginError(message) {

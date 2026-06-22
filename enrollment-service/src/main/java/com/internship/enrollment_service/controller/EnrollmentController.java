@@ -74,4 +74,16 @@ public class EnrollmentController {
                                     @RequestParam String studentUsername) {
         return enrollmentService.existsEnrollment(courseId, studentUsername);
     }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @DeleteMapping("/{id}")
+    public void deleteMyEnrollment(
+            @PathVariable String id,
+            Authentication authentication
+    ) {
+        enrollmentService.deleteEnrollmentByStudent(
+                id,
+                authentication.getName()
+        );
+    }
 }

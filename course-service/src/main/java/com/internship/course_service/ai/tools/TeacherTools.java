@@ -74,10 +74,8 @@ public class TeacherTools {
     @Tool(description = """
         Update an enrollment request status for the logged-in teacher.
 
-        Use this tool when a teacher clearly asks to approve or reject
-        a student's enrollment request.
-
-        Only APPROVED and REJECTED statuses are allowed through this tool.
+        Use this tool when a teacher clearly asks to change a student's enrollment status.
+        Allowed statuses are: PENDING, APPROVED, REJECTED, COMPLETED, CANCELLED.
         The input should include the course title, student username, and new status.
         """)
     public String updateEnrollmentStatus(
@@ -89,9 +87,14 @@ public class TeacherTools {
         String normalizedStudentUsername = normalize(studentUsername);
         String normalizedStatus = normalize(status);
 
-        if (!normalizedStatus.equals("approved")
-                && !normalizedStatus.equals("rejected")) {
-            return "Only APPROVED or REJECTED statuses are allowed.";
+        EnrollmentStatus enrollmentStatus;
+
+        try {
+            enrollmentStatus = EnrollmentStatus.valueOf(
+                    normalizedStatus.toUpperCase()
+            );
+        } catch (IllegalArgumentException exception) {
+            return "Invalid status. Allowed statuses are: PENDING, APPROVED, REJECTED, COMPLETED, CANCELLED.";
         }
 
         EnrollmentResponse enrollment = enrollmentClient.getMyTeacherEnrollments()
@@ -110,11 +113,7 @@ public class TeacherTools {
         EnrollmentResponse updatedEnrollment =
                 enrollmentClient.updateEnrollmentStatus(
                         enrollment.getId(),
-                        new UpdateEnrollmentStatusRequest(
-                                EnrollmentStatus.valueOf(
-                                        normalizedStatus.toUpperCase()
-                                )
-                        )
+                        new UpdateEnrollmentStatusRequest(enrollmentStatus)
                 );
 
         Course course = courseService.getCourseById(updatedEnrollment.getCourseId());

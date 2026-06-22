@@ -87,4 +87,9 @@ public class CourseController {
                                               Authentication authentication) {
         return courseService.getCourseStats(id, authentication);
     }
+
+    @PatchMapping("/{id}/restore-seat")
+    public void restoreSeat(@PathVariable String id) {
+        courseService.restoreSeat(id);
+    }
 }
